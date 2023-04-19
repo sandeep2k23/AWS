@@ -1,0 +1,32 @@
+####Crossregion Replication S3 Bucket Using CloudFormation Script
+##for this first need to create at TargetBucket
+###TargetBucket(Destination)
+# we need to create bucket in Us-east-1 region.
+AWSTemplateFormatVersion: 2010-09-09      #AWSTemplateFormatVersion
+Resources:
+  CRS3Bucket:
+    Type: 'AWS::S3::Bucket'               #Createing Bucket
+    Properties:
+      VersioningConfiguration:            #Bucket VersioningConfiguration
+        Status: Enabled
+      BucketName: 'crs3bucket-2'          #BucketName 
+
+###SourceBucket,ReplicationRole  
+#We need to create bucket in us-east-2 region.
+AWSTemplateFormatVersion: 2010-09-09       #AWSTemplateFormatVersion
+Resources:
+  CRS3Bucket:
+    Type: 'AWS::S3::Bucket'                #Createing Bucket
+    Properties:
+      BucketName: 'crs3east-1'              #BucketName
+      VersioningConfiguration:              #Bucket VersioningConfiguration
+        Status: Enabled
+      ReplicationConfiguration:             #ReplicationConfiguration
+        Role: 'arn:aws:iam::889142710491:role/replication_role'  #IAMRole
+        Rules:
+          - Id: MyRule1
+            Status: Enabled
+            Prefix: ''
+            Destination:
+              Bucket: 'arn:aws:s3:::crs3bucket-2'    #DestinationBucketName TargetBucket
+              StorageClass: STANDARD                 #StorageClass
