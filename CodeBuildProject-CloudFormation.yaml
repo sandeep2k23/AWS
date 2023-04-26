@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+ CodeBuildProject:
+   Type: AWS::CodeBuild::Project
+   Properties:
+     Artifacts:
+        Type: CODEPIPELINE 
+     Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/amazonlinux2-x86_64-standard:3.0
+        Type: LINUX_CONTAINER
+        EnvironmentVariables:    
+        - Name: Verscode-Test
+          Value: /CodeBuild/XXXXXX/VeracodeID
+          Type: PARAMETER_STORE
+        - Name: VERACODE_SECRETKEY
+          Value: /CodeBuild/XXXXXXX?VeracodeSecretkey
+          Type: PARAMETER_STORE
+     Name:  XXXXXXXX
+     ServiceRole: !Sub "arn:aws:iam::${AWS::AccountID}:role/cross-account-codepipeline-deploy-role"
+     Source:
+       Type: CODEPIPELINE
+       BuildSpec: !Sub "Veracodebuildspec.yml"
+     EncryptionKey: !Sub "arn:aws:Kms:us-east-1:${AWS::AccountId}:alias/mh/s3"
+     TimeoutInMinutes: 45     
+ 
