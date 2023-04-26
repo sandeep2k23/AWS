@@ -1,3 +1,6 @@
+    
+       ###CloudFormation Template to triggre CodeBuild with EventBridge Schedule
+
 AWSTemplateFormatVersion: 2010-09-09
 Resources:
   MyScheduledTrigger:
@@ -11,3 +14,4 @@ Resources:
      Target:
        Arn:  'arn:aws:codebuild:<Region>:<AccountNumber>:project/<codeBuildName>'
        RoleArn: '##while creating EventBridge Schedule Role ARN'
+   
