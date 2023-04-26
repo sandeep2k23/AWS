@@ -1,5 +1,5 @@
     
-       ###CloudFormation Template to triggre CodeBuild with EventBridge Schedule
+       ###CloudFormation Template to triggre CodeBuild with EventBridge Scheduler
 
 AWSTemplateFormatVersion: 2010-09-09
 Resources:
@@ -9,7 +9,7 @@ Resources:
      FlexibleTimeWindow:
        Mode: 'OFF'
      Name: Test  
-     ScheduleExpression: cron(0 0 * * ? *)
+     ScheduleExpression: cron(0 0 * * ? *)   ###Every month 1stday 1am est
      State: ENABLED
      Target:
        Arn:  'arn:aws:codebuild:<Region>:<AccountNumber>:project/<codeBuildName>'
