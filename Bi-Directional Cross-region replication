@@ -1,0 +1,53 @@
+Bi-Directional Cross-Region Replication
+
+1.	In Amazon S3 console create two buckets in different region bucket-a in us-east-1 bucket-b in us-east-2.
+2.	For both the buckets we need to Enable the Version control. 
+3.	In bucket-a go to Management tab and create replication rule.
+4.	Replication rules.
+a.	Replication name.
+b.	Source bucket
+c.	Destination bucket
+d.	IAM role
+e.	If we can also disable, enable, or delete maker replication, replication metrics, replica modification.
+5.	In bucket-b need to replicate the same as bucket-a (replication rule). 
+6.	Bi-Direction C-R Replication completed.
+7.	We upload a file and test it.
+
+##############Bi-Directional Cross-Region Replication
+AWSTemplateFormatVersion: 2010-09-09      #AWSTemplateFormatVersion
+Resources:
+  CRS3Bucket:
+    Type: 'AWS::S3::Bucket'               #Createing Bucket
+    Properties:
+      VersioningConfiguration:            #Bucket VersioningConfiguration
+        Status: Enabled
+      BucketName: 'crs3bucket-2'          #BucketName 
+  ReplicationConfiguration:             #ReplicationConfiguration
+        Role: 'arn:aws:iam::xxxxxxxxxxxxxx:role/replication_role'  #IAMRole
+        Rules:
+          - Id: MyRule1
+            Status: Enabled
+            Prefix: ''
+            Destination:
+              Bucket: 'arn:aws:s3:::crs3bucket-1'    #DestinationBucketName TargetBucket
+              StorageClass: STANDARD                 #StorageClass
+
+###SourceBucket,ReplicationRole  
+#We need to create bucket in us-east-2 region.
+AWSTemplateFormatVersion: 2010-09-09       #AWSTemplateFormatVersion
+Resources:
+  CRS3Bucket:
+    Type: 'AWS::S3::Bucket'                #Createing Bucket
+    Properties:
+      BucketName: 'crs3east-1'              #BucketName
+      VersioningConfiguration:              #Bucket VersioningConfiguration
+        Status: Enabled
+      ReplicationConfiguration:             #ReplicationConfiguration
+        Role: 'arn:aws:iam::xxxxxxxxxxxxxx:role/replication_role'  #IAMRole
+        Rules:
+          - Id: MyRule1
+            Status: Enabled
+            Prefix: ''
+            Destination:
+              Bucket: 'arn:aws:s3:::crs3bucket-2'    #DestinationBucketName TargetBucket
+              StorageClass: STANDARD                 #StorageClass
